@@ -1,4 +1,3 @@
-const VELOCITY = new Vector(50, 0);
 
 class Sprite {
     private image: HTMLImageElement;
@@ -20,6 +19,15 @@ class Sprite {
 
     public set clip(newClip: Transform) {
         this.currentClip = newClip;
+    }
+
+    public set position(newPosition: Vector) {
+        this.transform.position.x = newPosition.x;
+        this.transform.position.y = newPosition.y;
+    }
+
+    public get size(): Vector {
+        return this.transform.size;
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

@@ -1,11 +1,13 @@
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
 
 if (ctx === null)
     throw "Foda";
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+ctx.imageSmoothingEnabled = false;
 
 let spriteAnimations: SpriteAnimationDataBase = {};
 
@@ -71,25 +73,16 @@ spriteAnimations["andando"] = {
     ]
 };
 
-let sprites: Sprite[] = [];
-
-for (let i = 0; i < 5; i++) {
-    let sprite = new Sprite(
+let avatar = new DotFan(
+    new Sprite(
         "img/sheet.png",
         {
-            position: new Vector(Math.random() * window.innerWidth, window.innerHeight / 2),
-            size: new Vector(64, 64),
+            position: new Vector(0, 0),
+            size: new Vector(64, 64)
         }
-    );
-
-    sprites.push(sprite);
-    sprite.clip = {
-        position: new Vector(0, 0),
-        size: new Vector(32, 32)
-    };
-}
-
-let bubble = new SpeechBubble("Teste", new Vector(0, 0), new Vector(0, 0));
+    ),
+    new AnimationController(spriteAnimations)
+);
 
 // Main Loop
 let tempoAntigo = Date.now();
@@ -99,12 +92,15 @@ setInterval(() => {
     tempoAntigo = tempoAtual;
 
     // Update Sprites
+    avatar.update(deltaTime);
 
     // Draw Everything
     ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-
-    for (let sprite of sprites)
-        sprite.draw(ctx);
+    avatar.draw(ctx);
 }, 1 / 60);
+
+document.querySelector("#falar")?.addEventListener("click", () => {
+    avatar.addMessage("Mensagem de texto testavel testada");
+});
