@@ -79,15 +79,17 @@ for (let i = 0; i < 5; i++) {
         {
             position: new Vector(Math.random() * window.innerWidth, window.innerHeight / 2),
             size: new Vector(64, 64),
-        },
-        new AnimationController(spriteAnimations)
+        }
     );
 
-    sprite.currentAnimaion = "andando";
-
     sprites.push(sprite);
+    sprite.clip = {
+        position: new Vector(0, 0),
+        size: new Vector(32, 32)
+    };
 }
 
+let bubble = new SpeechBubble("Teste", new Vector(0, 0), new Vector(0, 0));
 
 // Main Loop
 let tempoAntigo = Date.now();
@@ -97,8 +99,6 @@ setInterval(() => {
     tempoAntigo = tempoAtual;
 
     // Update Sprites
-    for (let sprite of sprites)
-        sprite.update(deltaTime);
 
     // Draw Everything
     ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
