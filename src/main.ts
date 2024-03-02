@@ -1,104 +1,46 @@
-const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const ctx = canvas.getContext("2d");
 
+const loadedData = new SpriteInfoLoader();
+loadedData.load().then(() => {
 
-if (ctx === null)
-    throw "Foda";
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-ctx.imageSmoothingEnabled = false;
+    if (ctx === null)
+        throw "Foda";
 
-let spriteAnimations: SpriteAnimationDataBase = {};
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx.imageSmoothingEnabled = false;
 
-spriteAnimations["andando"] = {
-    currentFrame: 0,
-    frames: [
-        {
-            holdTime: 0.15,
-            x: 0,
-            y: 0,
-            w: 32,
-            h: 32,
-        },
-        {
-            holdTime: 0.15,
-            x: 32,
-            y: 0,
-            w: 32,
-            h: 32,
-        },
-        {
-            holdTime: 0.15,
-            x: 64,
-            y: 0,
-            w: 32,
-            h: 32,
-        },
-        {
-            holdTime: 0.15,
-            x: 96,
-            y: 0,
-            w: 32,
-            h: 32,
-        },
-        {
-            holdTime: 0.15,
-            x: 128,
-            y: 0,
-            w: 32,
-            h: 32,
-        },
-        {
-            holdTime: 0.15,
-            x: 160,
-            y: 0,
-            w: 32,
-            h: 32,
-        },
-        {
-            holdTime: 0.15,
-            x: 192,
-            y: 0,
-            w: 32,
-            h: 32,
-        },
-        {
-            holdTime: 0.15,
-            x: 224,
-            y: 0,
-            w: 32,
-            h: 32,
-        },
-    ]
-};
+    loadedData.selectRandomSprite();
 
-let avatar = new DotFan(
-    new Sprite(
-        "img/sheet.png",
-        {
-            position: new Vector(0, 0),
-            size: new Vector(64, 64)
-        }
-    ),
-    new AnimationController(spriteAnimations)
-);
+    let avatar = new DotFan(
+        new Sprite(
+            loadedData.path,
+            {
+                position: new Vector(0, 0),
+                size: new Vector(64, 64)
+            }
+        ),
+        new AnimationController(loadedData.animationDatabase)
+    );
 
-// Main Loop
-let tempoAntigo = Date.now();
-setInterval(() => {
-    let tempoAtual = Date.now();
-    let deltaTime = (tempoAtual - tempoAntigo) / 1000;
-    tempoAntigo = tempoAtual;
+    // Main Loop
+    let tempoAntigo = Date.now();
+    setInterval(() => {
+        let tempoAtual = Date.now();
+        let deltaTime = (tempoAtual - tempoAntigo) / 1000;
+        tempoAntigo = tempoAtual;
 
-    // Update Sprites
-    avatar.update(deltaTime);
+        // Update Sprites
+        avatar.update(deltaTime);
 
-    // Draw Everything
-    ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-    avatar.draw(ctx);
-}, 1 / 60);
+        // Draw Everything
+        ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+        avatar.draw(ctx);
+    }, 1 / 60);
 
-document.querySelector("#falar")?.addEventListener("click", () => {
-    avatar.addMessage("Mensagem de texto testavel testada");
+    document.querySelector("#falar")?.addEventListener("click", () => {
+        avatar.addMessage("Mensagem de texto testavel testada");
+    });
 });

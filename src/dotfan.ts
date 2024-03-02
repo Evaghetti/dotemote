@@ -41,7 +41,7 @@ class DotFan {
         let actualVelocity = VELOCITY.multiplyScalar(deltaTime);
         if (this.flipped)
             actualVelocity.inplaceMultiplyScalar(-1);
-        // this.position.inplaceAdd(actualVelocity);
+        this.position.inplaceAdd(actualVelocity);
 
         this.sprite.clip = this.animationController.clip;
         this.sprite.position = this.position;
