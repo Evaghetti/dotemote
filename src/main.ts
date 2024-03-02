@@ -12,18 +12,25 @@ loadedData.load().then(() => {
     canvas.height = window.innerHeight;
     ctx.imageSmoothingEnabled = false;
 
-    loadedData.selectRandomSprite();
 
-    let avatar = new DotFan(
-        new Sprite(
-            loadedData.path,
-            {
-                position: new Vector(0, 0),
-                size: new Vector(64, 64)
-            }
-        ),
-        new AnimationController(loadedData.animationDatabase)
-    );
+    let fans: DotFan[] = [];
+
+    for (let i = 0; i < 10; i++) {
+        loadedData.selectRandomSprite();
+
+        let fan = new DotFan(
+            new Sprite(
+                loadedData.path,
+                {
+                    position: new Vector(0, 0),
+                    size: new Vector(64, 64)
+                }
+            ),
+            new AnimationController(loadedData.animationDatabase)
+        );
+
+        fans.push(fan);
+    }
 
     // Main Loop
     let tempoAntigo = Date.now();
@@ -33,14 +40,18 @@ loadedData.load().then(() => {
         tempoAntigo = tempoAtual;
 
         // Update Sprites
-        avatar.update(deltaTime);
+        for (let fan of fans)
+            fan.update(deltaTime);
 
         // Draw Everything
         ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-        avatar.draw(ctx);
+        for (let fan of fans)
+            fan.draw(ctx);
     }, 1 / 60);
 
     document.querySelector("#falar")?.addEventListener("click", () => {
-        avatar.addMessage("Mensagem de texto testavel testada");
+        let fan = fans[Math.floor(Math.random() * fans.length)];
+
+        fan.addMessage("Mensagem de texto testavel testada");
     });
 });

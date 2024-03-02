@@ -26,8 +26,7 @@ class SpriteInfoLoader {
 
                     let database: SpriteAnimationDataBase = {};
                     for (let teste of json.animations) {
-                        database[teste.name] = { currentFrame: 0, frames: [] };
-                        database[teste.name].currentFrame = 0;
+                        database[teste.name] = { frames: [] };
                         database[teste.name].frames = teste.frames;
                     }
 

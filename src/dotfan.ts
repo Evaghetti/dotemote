@@ -9,7 +9,10 @@ class DotFan {
         private sprite: Sprite,
         private animationController: AnimationController,
     ) {
-        this.position = new Vector(window.innerWidth * Math.random(), window.innerHeight / 2);
+        let posYSpawn = window.innerHeight / 2 - this.sprite.size.y;
+        posYSpawn += Math.random() * this.sprite.size.y;
+
+        this.position = new Vector(window.innerWidth * Math.random(), posYSpawn);
 
         this.animationController.changeAnimation("andando"); // TODO: mudar isso pra caso tenha mais de uma animação
 

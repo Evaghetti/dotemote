@@ -8,7 +8,6 @@ interface Frame {
 
 interface SpriteAnimation {
     frames: Frame[],
-    currentFrame: number
 }
 
 interface SpriteAnimationDataBase {
@@ -18,6 +17,7 @@ interface SpriteAnimationDataBase {
 class AnimationController {
     public currentTime: number = 0;
     public nameCurrentAnimation: string = "";
+    private currentFrameIndex: number = 0;
 
     constructor(private animations: SpriteAnimationDataBase) {
     }
@@ -29,7 +29,7 @@ class AnimationController {
         if (this.currentTime >= frame.holdTime) {
             const animation = this.currentAnimation;
 
-            animation.currentFrame = (animation.currentFrame + 1) % animation.frames.length;
+            this.currentFrameIndex = (this.currentFrameIndex + 1) % animation.frames.length;
             this.currentTime = 0;
         }
     }
@@ -37,7 +37,7 @@ class AnimationController {
     public changeAnimation(newAnimation: string): void {
         if (this.nameCurrentAnimation.length > 0) {
             this.currentTime = 0;
-            this.currentAnimation.currentFrame = 0;
+            this.currentFrameIndex = 0;
         }
 
         this.nameCurrentAnimation = newAnimation;
@@ -59,7 +59,7 @@ class AnimationController {
     public get currentFrame(): Frame {
         const currentAnimation = this.currentAnimation;
 
-        return currentAnimation.frames[currentAnimation.currentFrame];
+        return currentAnimation.frames[this.currentFrameIndex];
     }
 
 }
