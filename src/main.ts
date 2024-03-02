@@ -96,8 +96,6 @@ setInterval(() => {
 
     // Draw Everything
     ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-    ctx.fillStyle = "green";
-    ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
     avatar.draw(ctx);
 }, 1 / 60);
 

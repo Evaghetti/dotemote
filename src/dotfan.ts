@@ -41,13 +41,27 @@ class DotFan {
         let actualVelocity = VELOCITY.multiplyScalar(deltaTime);
         if (this.flipped)
             actualVelocity.inplaceMultiplyScalar(-1);
-        this.position.inplaceAdd(actualVelocity);
+        // this.position.inplaceAdd(actualVelocity);
 
         this.sprite.clip = this.animationController.clip;
         this.sprite.position = this.position;
 
-        for (let bubble of this.bubbles)
+        for (let i = 0; i < this.bubbles.length; i++) {
+            const bubble = this.bubbles[i];
+
             bubble.updatePosition();
+            if (bubble.shouldKill) {
+                for (let j = i + 1; j < this.bubbles.length; j++) {
+                    const updatingBubble = this.bubbles[j];
+
+                    updatingBubble.addOffset(new Vector(0, bubble.size.y));
+                }
+
+                bubble.deleteElement();
+                this.bubbles.splice(i, 1);
+                i--;
+            }
+        }
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {
