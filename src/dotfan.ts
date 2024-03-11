@@ -9,8 +9,7 @@ class DotFan {
         private sprite: Sprite,
         private animationController: AnimationController,
     ) {
-        let posYSpawn = window.innerHeight / 2 - this.sprite.size.y;
-        posYSpawn += Math.random() * this.sprite.size.y;
+        const posYSpawn = 0;
 
         this.position = new Vector(window.innerWidth * Math.random(), posYSpawn);
 
