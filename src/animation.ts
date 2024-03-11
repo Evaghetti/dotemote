@@ -1,4 +1,6 @@
-interface Frame {
+import {Transform, Vector} from "./vector";
+
+export interface Frame {
     holdTime: number,
     x: number,
     y: number,
@@ -6,15 +8,15 @@ interface Frame {
     h: number,
 }
 
-interface SpriteAnimation {
+export interface SpriteAnimation {
     frames: Frame[],
 }
 
-interface SpriteAnimationDataBase {
+export interface SpriteAnimationDataBase {
     [name: string]: SpriteAnimation
 }
 
-class AnimationController {
+export class AnimationController {
     public currentTime: number = 0;
     public nameCurrentAnimation: string = "";
     private currentFrameIndex: number = 0;

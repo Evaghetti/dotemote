@@ -1,5 +1,5 @@
 
-class Vector {
+export class Vector {
     constructor(public x: number, public y: number) { }
 
     // Original methods returning new instances
@@ -61,7 +61,7 @@ class Vector {
     }
 }
 
-interface Transform {
+export interface Transform {
     position: Vector,
     size: Vector
 }

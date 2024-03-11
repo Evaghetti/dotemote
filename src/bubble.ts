@@ -1,4 +1,6 @@
-class SpeechBubble {
+import {Vector} from "./vector";
+
+export class SpeechBubble {
     private element: HTMLElement;
     private kill: boolean = false;
 

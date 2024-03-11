@@ -1,4 +1,19 @@
+import * as tmi from "tmi.js";
+import {SpriteInfoLoader} from "./load-data";
+import {AnimationController} from "./animation";
+import {DotFan} from "./dotfan";
+import {Vector} from "./vector";
+import {Sprite} from "./sprite";
 
+const client = new tmi.Client({
+	channels: [ 'vinidotruan' ]
+});
+
+client.connect();
+
+client.on('message', (channel: any, tags: any, message:any, self:boolean) => {
+	console.log(`${tags['display-name']}: ${message}`);
+});
 const loadedData = new SpriteInfoLoader();
 loadedData.load().then(() => {
 

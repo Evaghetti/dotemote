@@ -1,14 +1,16 @@
-interface JsonAnimation {
+import {Frame, SpriteAnimationDataBase} from "./animation";
+
+export interface JsonAnimation {
     name: string,
     frames: Frame[]
 }
 
-interface JsonSprite {
+export interface JsonSprite {
     path: string,
     animations: JsonAnimation[]
 }
 
-class SpriteInfoLoader {
+export class SpriteInfoLoader {
     private pathes: string[] = [];
     private animationDatabases: SpriteAnimationDataBase[] = [];
     private currentIndex: number = 0;

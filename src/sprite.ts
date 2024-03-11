@@ -1,5 +1,6 @@
+import {Transform, Vector} from "./vector";
 
-class Sprite {
+export class Sprite {
     private image: HTMLImageElement;
     private flipped: boolean = false;
     private currentClip: Transform;

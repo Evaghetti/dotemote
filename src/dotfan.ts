@@ -1,6 +1,11 @@
+import {AnimationController} from "./animation";
+import {SpeechBubble} from "./bubble";
+import {Vector} from "./vector";
+import {Sprite} from "./sprite";
+
 const VELOCITY = new Vector(50, 0);
 
-class DotFan {
+export class DotFan {
     private bubbles: SpeechBubble[] = [];
     private position: Vector;
     private flipped: boolean;
@@ -71,6 +76,6 @@ class DotFan {
     }
 }
 
-interface AvatarDatabase {
+export interface AvatarDatabase {
     [id: string]: DotFan
 }
