@@ -1,72 +1,51 @@
-import * as tmi from "tmi.js";
 import {SpriteInfoLoader} from "./load-data";
-import {AnimationController} from "./animation";
-import {DotFan} from "./dotfan";
-import {Vector} from "./vector";
-import {Sprite} from "./sprite";
-
-const client = new tmi.Client({
-	channels: [ 'vinidotruan' ]
-});
-
-client.connect();
-
-client.on('message', (channel: any, tags: any, message:any, self:boolean) => {
-	console.log(`${tags['display-name']}: ${message}`);
-});
-const loadedData = new SpriteInfoLoader();
-loadedData.load().then(() => {
-
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const ctx = canvas.getContext("2d");
-
-    if (ctx === null)
-        throw "Foda";
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    ctx.imageSmoothingEnabled = false;
+import {ChatterService} from "./services/chatter-service";
+import {TwitchService} from "./services/twitch-service";
 
 
-    let fans: DotFan[] = [];
+export class Main {
+  private canvas = document.getElementById("canvas") as HTMLCanvasElement;
+  private ctx = this.canvas.getContext("2d");
+  private twitchService = new TwitchService(new ChatterService())
 
-    for (let i = 0; i < 10; i++) {
-        loadedData.selectRandomSprite();
+  public main() {
+    if (!this.ctx) throw ("Bro wtf");
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    this.ctx.imageSmoothingEnabled = false;
+  }
 
-        let fan = new DotFan(
-            new Sprite(
-                loadedData.path,
-                {
-                    position: new Vector(0, 0),
-                    size: new Vector(64, 64)
-                }
-            ),
-            new AnimationController(loadedData.animationDatabase)
-        );
+  setUp() {
+  }
 
-        fans.push(fan);
-    }
-
-    // Main Loop
+  render() {
     let tempoAntigo = Date.now();
     setInterval(() => {
-        let tempoAtual = Date.now();
-        let deltaTime = (tempoAtual - tempoAntigo) / 1000;
-        tempoAntigo = tempoAtual;
+      let tempoAtual = Date.now();
+      let deltaTime = (tempoAtual - tempoAntigo) / 1000;
+      tempoAntigo = tempoAtual;
 
-        // Update Sprites
-        for (let fan of fans)
-            fan.update(deltaTime);
+      // Update Sprites
+      for (let fan of this.twitchService.fans())
+        fan.update(deltaTime);
 
+      if (this.ctx) {
         // Draw Everything
-        ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-        for (let fan of fans)
-            fan.draw(ctx);
+        this.ctx.clearRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+        for (let fan of this.twitchService.fans())
+          fan.draw(this.ctx);
+      }
+
     }, 1 / 60);
 
-    document.querySelector("#falar")?.addEventListener("click", () => {
-        let fan = fans[Math.floor(Math.random() * fans.length)];
+    // document.querySelector("#falar")?.addEventListener("click", () => {
+    //     let fan = fans[Math.floor(Math.random() * fans.length)];
+    //
+    //     fan.addMessage("Mensagem de texto testavel testada");
+    // });
+  }
+}
 
-        fan.addMessage("Mensagem de texto testavel testada");
-    });
-});
+const render = new Main();
+render.main();
+render.render();
