@@ -15,13 +15,15 @@ export class DotFan {
     private animationController: AnimationController,
     private id: string,
   ) {
-    this.position = new Vector(window.innerWidth * Math.random(), window.innerHeight / 2);
+    this.position = new Vector(
+      window.innerWidth * Math.random(),
+      window.innerHeight / 2,
+    );
 
     this.animationController.changeAnimation("andando"); // TODO: mudar isso pra caso tenha mais de uma animação
 
     this.flipped = Math.random() >= 0.5;
-    if (this.flipped)
-      this.sprite.flip();
+    if (this.flipped) this.sprite.flip();
   }
 
   public addMessage(content: string): void {
@@ -45,8 +47,7 @@ export class DotFan {
     }
 
     let actualVelocity = VELOCITY.multiplyScalar(deltaTime);
-    if (this.flipped)
-      actualVelocity.inplaceMultiplyScalar(-1);
+    if (this.flipped) actualVelocity.inplaceMultiplyScalar(-1);
     this.position.inplaceAdd(actualVelocity);
 
     this.sprite.clip = this.animationController.clip;
@@ -76,5 +77,5 @@ export class DotFan {
 }
 
 export interface AvatarDatabase {
-  [id: string]: DotFan
+  [id: string]: DotFan;
 }

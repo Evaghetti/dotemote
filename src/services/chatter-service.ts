@@ -1,11 +1,11 @@
-import {DotFan} from "../dotfan";
-import {Sprite} from "../sprite";
-import {Vector} from "../vector";
-import {AnimationController} from "../animation";
-import {SpriteInfoLoader} from "../load-data";
+import { DotFan } from "../dotfan";
+import { Sprite } from "../sprite";
+import { Vector } from "../vector";
+import { AnimationController } from "../animation";
+import { SpriteInfoLoader } from "../load-data";
 
 interface ChatterDatabase {
-  [id: string]: DotFan
+  [id: string]: DotFan;
 }
 
 export class ChatterService {
@@ -18,17 +18,14 @@ export class ChatterService {
 
   public addChatter(id: string) {
     let newChatter = new DotFan(
-        new Sprite(
-          this.loadedData.path,
-          {
-            position: new Vector(0, 10),
-            size: new Vector(64, 64)
-          }
-        ),
-        new AnimationController(this.loadedData.animationDatabase),
-        id
-    )
-    this._chatters[id] = newChatter
+      new Sprite(this.loadedData.path, {
+        position: new Vector(0, 10),
+        size: new Vector(64, 64),
+      }),
+      new AnimationController(this.loadedData.animationDatabase),
+      id,
+    );
+    this._chatters[id] = newChatter;
   }
 
   get chatters() {

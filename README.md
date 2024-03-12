@@ -2,10 +2,11 @@
 
 ## Configuração
 
-- Você vai precisar ter o typescript instalado na sua máquina
-    ```bash
-    npm install -g typescript
-    ```
+Você vai precisar ter o typescript instalado na sua máquina
+
+```bash
+npm install -g typescript
+```
 
 ## Setup
 

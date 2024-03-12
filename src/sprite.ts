@@ -1,16 +1,19 @@
-import {Transform, Vector} from "./vector";
+import { Transform, Vector } from "./vector";
 
 export class Sprite {
   private readonly image: HTMLImageElement;
   private flipped: boolean = false;
   private currentClip: Transform;
 
-  constructor(path: string, private transform: Transform) {
+  constructor(
+    path: string,
+    private transform: Transform,
+  ) {
     this.image = new Image();
     this.image.src = path;
     this.currentClip = {
       position: new Vector(0, 0),
-      size: new Vector(this.image.width, this.image.height)
+      size: new Vector(this.image.width, this.image.height),
     };
   }
 
@@ -43,10 +46,10 @@ export class Sprite {
       this.currentClip.position.y,
       this.currentClip.size.x,
       this.currentClip.size.y,
-      (this.flipped) ? -this.transform.position.x : this.transform.position.x,
+      this.flipped ? -this.transform.position.x : this.transform.position.x,
       this.transform.position.y,
       this.transform.size.x,
-      this.transform.size.y
+      this.transform.size.y,
     );
 
     if (this.flipped) {
@@ -55,4 +58,3 @@ export class Sprite {
     }
   }
 }
-
