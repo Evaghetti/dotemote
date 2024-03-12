@@ -1,77 +1,80 @@
+import { AnimationController } from "./animation";
+import { SpeechBubble } from "./bubble";
+import { Vector } from "./vector";
+import { Sprite } from "./sprite";
+
 const VELOCITY = new Vector(50, 0);
 
-class DotFan {
-    private bubbles: SpeechBubble[] = [];
-    private position: Vector;
-    private flipped: boolean;
+export class DotFan {
+  private bubbles: SpeechBubble[] = [];
+  private position: Vector;
+  private flipped: boolean;
 
-    constructor(
-        private sprite: Sprite,
-        private animationController: AnimationController,
-    ) {
-        let posYSpawn = window.innerHeight / 2 - this.sprite.size.y;
-        posYSpawn += Math.random() * this.sprite.size.y;
+  constructor(
+    private sprite: Sprite,
+    private animationController: AnimationController,
+    private id: string,
+  ) {
+    this.position = new Vector(window.innerWidth * Math.random(), window.innerHeight / 2);
 
-        this.position = new Vector(window.innerWidth * Math.random(), posYSpawn);
+    this.animationController.changeAnimation("andando"); // TODO: mudar isso pra caso tenha mais de uma animação
 
-        this.animationController.changeAnimation("andando"); // TODO: mudar isso pra caso tenha mais de uma animação
+    this.flipped = Math.random() >= 0.5;
+    if (this.flipped)
+      this.sprite.flip();
+  }
 
-        this.flipped = Math.random() >= 0.5;
-        if (this.flipped)
-            this.sprite.flip();
+  public addMessage(content: string): void {
+    let offset = new Vector(0, -this.sprite.size.y);
+    let newBubble = new SpeechBubble(content, this.position, offset);
+
+    for (let bubble of this.bubbles) {
+      offset.y += -bubble.size.y;
+
+      bubble.layer = bubble.layer + 1;
     }
 
-    public addMessage(content: string): void {
-        let offset = new Vector(0, -this.sprite.size.y);
-        let newBubble = new SpeechBubble(content, this.position, offset);
+    this.bubbles.push(newBubble);
+  }
 
-        for (let bubble of this.bubbles) {
-            offset.y += -bubble.size.y;
+  public update(deltaTime: number): void {
+    this.animationController.updateAnimation(deltaTime);
+    if (Math.random() >= 0.995) {
+      this.sprite.flip();
+      this.flipped = !this.flipped;
+    }
 
-            bubble.layer = bubble.layer + 1;
+    let actualVelocity = VELOCITY.multiplyScalar(deltaTime);
+    if (this.flipped)
+      actualVelocity.inplaceMultiplyScalar(-1);
+    this.position.inplaceAdd(actualVelocity);
+
+    this.sprite.clip = this.animationController.clip;
+    this.sprite.position = this.position;
+
+    for (let i = 0; i < this.bubbles.length; i++) {
+      const bubble = this.bubbles[i];
+
+      bubble.updatePosition();
+      if (bubble.shouldKill) {
+        for (let j = i + 1; j < this.bubbles.length; j++) {
+          const updatingBubble = this.bubbles[j];
+
+          updatingBubble.addOffset(new Vector(0, bubble.size.y));
         }
 
-        this.bubbles.push(newBubble);
+        bubble.deleteElement();
+        this.bubbles.splice(i, 1);
+        i--;
+      }
     }
+  }
 
-    public update(deltaTime: number): void {
-        this.animationController.updateAnimation(deltaTime);
-        if (Math.random() >= 0.995) {
-            this.sprite.flip();
-            this.flipped = !this.flipped;
-        }
-
-        let actualVelocity = VELOCITY.multiplyScalar(deltaTime);
-        if (this.flipped)
-            actualVelocity.inplaceMultiplyScalar(-1);
-        this.position.inplaceAdd(actualVelocity);
-
-        this.sprite.clip = this.animationController.clip;
-        this.sprite.position = this.position;
-
-        for (let i = 0; i < this.bubbles.length; i++) {
-            const bubble = this.bubbles[i];
-
-            bubble.updatePosition();
-            if (bubble.shouldKill) {
-                for (let j = i + 1; j < this.bubbles.length; j++) {
-                    const updatingBubble = this.bubbles[j];
-
-                    updatingBubble.addOffset(new Vector(0, bubble.size.y));
-                }
-
-                bubble.deleteElement();
-                this.bubbles.splice(i, 1);
-                i--;
-            }
-        }
-    }
-
-    public draw(ctx: CanvasRenderingContext2D): void {
-        this.sprite.draw(ctx);
-    }
+  public draw(ctx: CanvasRenderingContext2D): void {
+    this.sprite.draw(ctx);
+  }
 }
 
-interface AvatarDatabase {
-    [id: string]: DotFan
+export interface AvatarDatabase {
+  [id: string]: DotFan
 }
