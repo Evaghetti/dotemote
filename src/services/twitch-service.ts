@@ -6,7 +6,7 @@ export class TwitchService {
 
   constructor(private fansService: ChatterService) {
     this.client = new tmi.Client({
-      channels: ["vinidotruan"],
+      channels: ["vinidotruan"]
     });
 
     this.client.connect();
@@ -22,8 +22,7 @@ export class TwitchService {
 
         let fan = this.fansService.chatter(chatter);
         fan.addMessage(message);
-        console.log(fan, message);
-      },
+      }
     );
   }
 
