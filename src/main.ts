@@ -37,12 +37,6 @@ export class Main {
       }
 
     }, 1 / 60);
-
-    // document.querySelector("#falar")?.addEventListener("click", () => {
-    //     let fan = fans[Math.floor(Math.random() * fans.length)];
-    //
-    //     fan.addMessage("Mensagem de texto testavel testada");
-    // });
   }
 }
 

@@ -1,7 +1,7 @@
-import {AnimationController} from "./animation";
-import {SpeechBubble} from "./bubble";
-import {Vector} from "./vector";
-import {Sprite} from "./sprite";
+import { AnimationController } from "./animation";
+import { SpeechBubble } from "./bubble";
+import { Vector } from "./vector";
+import { Sprite } from "./sprite";
 
 const VELOCITY = new Vector(50, 0);
 
@@ -15,9 +15,7 @@ export class DotFan {
     private animationController: AnimationController,
     private id: string,
   ) {
-    const posYSpawn = 0;
-
-    this.position = new Vector(window.innerWidth * Math.random(), posYSpawn);
+    this.position = new Vector(window.innerWidth * Math.random(), window.innerHeight / 2);
 
     this.animationController.changeAnimation("andando"); // TODO: mudar isso pra caso tenha mais de uma animação
 

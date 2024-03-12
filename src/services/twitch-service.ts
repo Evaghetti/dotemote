@@ -3,7 +3,6 @@ import {ChatterService} from "./chatter-service";
 
 export class TwitchService {
   private client = new tmi.Client({});
-  private chatters: string[] = [];
 
   constructor(private fansService: ChatterService) {
     this.client = new tmi.Client({
@@ -14,12 +13,14 @@ export class TwitchService {
 
     this.client.on('message', (channel: any, tags: any, message: any, self: boolean) => {
       const chatter = tags['display-name'];
-      if (this.chatters.filter((c: string) => c === chatter).length === 0) {
-        this.chatters.push(chatter);
+
+      if (!this.fansService.hasChatter(chatter)) {
         this.fansService.addChatter(chatter);
       }
 
-      console.log(`${tags['display-name']}: ${message}`);
+      let fan = this.fansService.chatter(chatter);
+      fan.addMessage(message);
+      console.log(fan, message);
     });
   }
 
