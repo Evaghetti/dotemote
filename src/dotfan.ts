@@ -13,11 +13,11 @@ export class DotFan {
   constructor(
     private sprite: Sprite,
     private animationController: AnimationController,
-    private id: string,
+    private id: string
   ) {
     this.position = new Vector(
       window.innerWidth * Math.random(),
-      window.innerHeight / 2,
+      window.innerHeight - this.sprite.size.y
     );
 
     this.animationController.changeAnimation("andando"); // TODO: mudar isso pra caso tenha mais de uma animação
@@ -32,7 +32,6 @@ export class DotFan {
 
     for (let bubble of this.bubbles) {
       offset.y += -bubble.size.y;
-
       bubble.layer = bubble.layer + 1;
     }
 
@@ -41,7 +40,13 @@ export class DotFan {
 
   public update(deltaTime: number): void {
     this.animationController.updateAnimation(deltaTime);
-    if (Math.random() >= 0.995) {
+
+    if (this.position.x < 0) {
+      this.position.x = 0;
+      this.sprite.flip();
+      this.flipped = !this.flipped;
+    } else if (this.position.x + this.sprite.size.x > window.innerWidth) {
+      this.position.x = window.innerWidth - this.sprite.size.x;
       this.sprite.flip();
       this.flipped = !this.flipped;
     }
@@ -74,6 +79,7 @@ export class DotFan {
   public draw(ctx: CanvasRenderingContext2D): void {
     this.sprite.draw(ctx);
   }
+
 }
 
 export interface AvatarDatabase {

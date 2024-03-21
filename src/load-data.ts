@@ -33,7 +33,6 @@ export class SpriteInfoLoader {
           this.animationDatabases.push(database);
         }
 
-        console.log(this.pathes, this.animationDatabases);
       });
   }
 

@@ -3,20 +3,22 @@ import { Vector } from "./vector";
 export class SpeechBubble {
   private element: HTMLElement;
   private kill: boolean = false;
+  private contentSize = 0;
 
   constructor(
     content: string,
     private track: Vector,
-    private offset: Vector,
+    private offset: Vector
   ) {
     this.element = document.createElement("div");
-
-    this.element.classList.add("bubble", "medium", "bottom");
+    this.contentSize = content.length;
+    this.element.classList.add("bubble", this.getContentSize(), "bottom");
     this.element.innerText = content;
     this.element.style.opacity = "1";
-    this.updatePosition();
 
     document.getElementsByTagName("body")[0].appendChild(this.element);
+    this.addOffset(new Vector(0, this.getBubbleY(this.contentSize)));
+    this.updatePosition();
 
     setTimeout(() => {
       let interval = setInterval(() => {
@@ -76,5 +78,25 @@ export class SpeechBubble {
 
   public set layer(newLayer: number) {
     this.element.style.zIndex = `${newLayer}`;
+  }
+
+  private getContentSize() {
+    if (this.contentSize < 20) {
+      return "small";
+    } else if (this.contentSize < 40) {
+      return "medium";
+    } else {
+      return "large";
+    }
+  }
+
+  private shouldAddOffset() {
+
+  }
+
+
+  private getBubbleY(contentSize: number) {
+    if (contentSize > 50) return -(this.element.offsetHeight + 64);
+    return -64;
   }
 }

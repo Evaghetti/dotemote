@@ -1,33 +1,37 @@
 <!doctype html>
 <html>
-  <head>
-    <link rel="stylesheet" href="css/bubble.css" />
-    <style>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+
+  <style>
+      * {
+          font-family: "Press Start 2P";
+      }
+  </style>
+  <link rel="stylesheet" href="css/bubble.css" />
+  <style>
       canvas,
       body {
-        margin: 0%;
-        padding: 0%;
+          margin: 0%;
+          padding: 0%;
       }
 
       canvas {
-        image-rendering: pixelated;
+          image-rendering: pixelated;
       }
 
       .bubble {
-        position: fixed;
+          position: fixed;
       }
-    </style>
-    <script>
-      var exports = {};
-    </script>
-  </head>
+  </style>
+  <script>
+    var exports = {};
+  </script>
+</head>
 
-  <body>
-    <canvas id="canvas">Sem canvas fica foda</canvas>
-    <button id="falar" style="position: fixed; left: 0px; top: 0px">
-      Falar
-    </button>
+<body>
+<canvas id="canvas" width="1920" height="200">Sem canvas fica foda</canvas>
 
-    <script src="dist/bundle.js"></script>
-  </body>
+<script src="dist/bundle.js"></script>
+</body>
 </html>

@@ -20,10 +20,10 @@ export class ChatterService {
     let newChatter = new DotFan(
       new Sprite(this.loadedData.path, {
         position: new Vector(0, 10),
-        size: new Vector(64, 64),
+        size: new Vector(64, 64)
       }),
       new AnimationController(this.loadedData.animationDatabase),
-      id,
+      id
     );
     this._chatters[id] = newChatter;
   }
