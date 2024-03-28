@@ -23,7 +23,6 @@ export class ChatterService {
         size: new Vector(64, 64)
       }),
       new AnimationController(this.loadedData.animationDatabase),
-      id
     );
     this._chatters[id] = newChatter;
   }

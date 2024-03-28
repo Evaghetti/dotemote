@@ -13,7 +13,6 @@ export class DotFan {
   constructor(
     private sprite: Sprite,
     private animationController: AnimationController,
-    private id: string
   ) {
     this.position = new Vector(
       window.innerWidth * Math.random(),
