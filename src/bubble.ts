@@ -17,7 +17,7 @@ export class SpeechBubble {
     this.element.style.opacity = "1";
 
     document.getElementsByTagName("body")[0].appendChild(this.element);
-    this.addOffset(new Vector(0, this.getBubbleY(this.contentSize)));
+    this.offset.inplaceAdd(new Vector(0, -this.size.y));
     this.updatePosition();
 
     setTimeout(() => {
@@ -88,15 +88,5 @@ export class SpeechBubble {
     } else {
       return "large";
     }
-  }
-
-  private shouldAddOffset() {
-
-  }
-
-
-  private getBubbleY(contentSize: number) {
-    if (contentSize > 50) return -(this.element.offsetHeight + 64);
-    return -64;
   }
 }
