@@ -30,8 +30,8 @@ export class DotFan {
     let newBubble = new SpeechBubble(content, this.position, offset);
 
     for (let bubble of this.bubbles) {
-      offset.y += -bubble.size.y;
-      bubble.layer = bubble.layer + 1;
+      bubble.layer = bubble.layer - 1;
+      bubble.addOffset(new Vector(0, -(newBubble.size.y + bubble.padding)))
     }
 
     this.bubbles.push(newBubble);
@@ -62,12 +62,6 @@ export class DotFan {
 
       bubble.updatePosition();
       if (bubble.shouldKill) {
-        for (let j = i + 1; j < this.bubbles.length; j++) {
-          const updatingBubble = this.bubbles[j];
-
-          updatingBubble.addOffset(new Vector(0, bubble.size.y));
-        }
-
         bubble.deleteElement();
         this.bubbles.splice(i, 1);
         i--;

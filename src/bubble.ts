@@ -89,4 +89,13 @@ export class SpeechBubble {
       return "large";
     }
   }
+
+  public get padding(): number {
+    const cssObject = getComputedStyle(this.element);
+    let paddingValue = cssObject.getPropertyValue("padding").match(/\d+/);
+
+    if (paddingValue === null)
+      return 0;
+    return parseInt(paddingValue[0]);
+  }
 }
