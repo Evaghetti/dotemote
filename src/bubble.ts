@@ -37,6 +37,11 @@ export class SpeechBubble {
     const actualPosition = this.track.add(this.offset);
     actualPosition.x -= this.size.x / 4;
 
+    actualPosition.x = Math.max(actualPosition.x, 0);
+    if (actualPosition.x + this.size.x + this.padding + this.margin >= window.innerWidth) {
+      actualPosition.x = window.innerWidth - this.size.x - this.padding - this.margin;
+    }
+
     this.element.style.left = `${actualPosition.x}px`;
     this.element.style.top = `${actualPosition.y}px`;
   }
@@ -97,5 +102,14 @@ export class SpeechBubble {
     if (paddingValue === null)
       return 0;
     return parseInt(paddingValue[0]);
+  }
+
+  public get margin(): number {
+    const cssObject = getComputedStyle(this.element);
+    let marginValue = cssObject.getPropertyValue("margin").match(/\d+/);
+
+    if (marginValue === null)
+      return 0;
+    return parseInt(marginValue[0]);
   }
 }
