@@ -1,5 +1,5 @@
 import { Vector } from "./vector";
-import { TwitchService, EmoteImage } from "./services/twitch-service";
+import { TwitchService } from "./services/twitch-service";
 
 interface WhereToReplace {
   index: number,
@@ -138,7 +138,6 @@ export class SpeechBubble {
       }
     }
 
-    console.log(words, indexesToReplace, emoteDatabase, count);
     const size = this.getContentSize(count);
     for (const replacing of indexesToReplace) {
       let url = TwitchService.getUrlBySize(size, emoteDatabase[replacing.name]);

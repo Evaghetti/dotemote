@@ -3,3 +3,4 @@ src/*.js
 src/services/*.js
 dist/
 .idea
+config.json

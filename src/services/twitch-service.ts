@@ -2,9 +2,6 @@ import * as tmi from "tmi.js";
 
 import { ChatterService } from "./chatter-service";
 
-const CLIENT_ID = "REDACTED";
-const CLIENT_SECRET = "REDACTED";
-
 interface AuthResponse {
   access_token: string,
   expires_in: number,
@@ -36,6 +33,11 @@ export interface EmoteDatabase {
   [name: string]: EmoteImage;
 }
 
+interface Config {
+  client_id: string,
+  client_secret: string
+}
+
 export class TwitchService {
   private static emoteDatabase: EmoteDatabase = {};
   private client = new tmi.Client({});
@@ -45,9 +47,12 @@ export class TwitchService {
   }
 
   private async prepareLoader() {
+    let config = await fetch("/config.json")
+      .then((r) => r.json()) as Config;
+
     let requestAuth = await fetch("https://id.twitch.tv/oauth2/token", {
       method: "POST",
-      body: `client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials`,
+      body: `client_id=${config.client_id}&client_secret=${config.client_secret}&grant_type=client_credentials`,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       }
@@ -61,7 +66,7 @@ export class TwitchService {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "Authorization": `Bearer ${authResponse.access_token}`,
-        "Client-Id": `${CLIENT_ID}`
+        "Client-Id": `${config.client_id}`
       }
     })
 
