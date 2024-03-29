@@ -1,4 +1,10 @@
 import { Vector } from "./vector";
+import { TwitchService, EmoteImage } from "./services/twitch-service";
+
+interface WhereToReplace {
+  index: number,
+  name: string
+}
 
 export class SpeechBubble {
   private element: HTMLElement;
@@ -11,9 +17,8 @@ export class SpeechBubble {
     private offset: Vector
   ) {
     this.element = document.createElement("div");
-    this.contentSize = content.length;
-    this.element.classList.add("bubble", this.getContentSize(), "bottom");
-    this.element.innerText = content;
+    [this.element.innerHTML, this.contentSize] = this.finalizedContent(content);
+    this.element.classList.add("bubble", this.getContentSize(this.contentSize), "bottom");
     this.element.style.opacity = "1";
 
     document.getElementsByTagName("body")[0].appendChild(this.element);
@@ -85,10 +90,10 @@ export class SpeechBubble {
     this.element.style.zIndex = `${newLayer}`;
   }
 
-  private getContentSize() {
-    if (this.contentSize < 20) {
+  private getContentSize(size: number) {
+    if (size < 20) {
       return "small";
-    } else if (this.contentSize < 40) {
+    } else if (size < 40) {
       return "medium";
     } else {
       return "large";
@@ -111,5 +116,35 @@ export class SpeechBubble {
     if (marginValue === null)
       return 0;
     return parseInt(marginValue[0]);
+  }
+
+
+  private finalizedContent(content: string): [string, number] {
+    const emoteDatabase = TwitchService.emotes;
+    const words = content.split(" ");
+    const indexesToReplace: WhereToReplace[] = [];
+    let count = 0;
+
+    for (let i = 0; i < words.length; i++) {
+      if (emoteDatabase[words[i]]) {
+        indexesToReplace.push({
+          name: words[i],
+          index: i
+        });
+        count += 1;
+      }
+      else {
+        count += words[i].length
+      }
+    }
+
+    console.log(words, indexesToReplace, emoteDatabase, count);
+    const size = this.getContentSize(count);
+    for (const replacing of indexesToReplace) {
+      let url = TwitchService.getUrlBySize(size, emoteDatabase[replacing.name]);
+      words[replacing.index] = `<img src=${url}>`;
+    }
+
+    return [words.join(" "), count];
   }
 }

@@ -14,7 +14,7 @@ export class Main {
     this.ctx.imageSmoothingEnabled = false;
   }
 
-  setUp() {}
+  setUp() { }
 
   render() {
     let tempoAntigo = Date.now();

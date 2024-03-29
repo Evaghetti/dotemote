@@ -11,22 +11,33 @@ interface AuthResponse {
   token_type: string
 }
 
-interface Emote {
+export interface EmoteImage {
+  url_1x: string,
+  url_2x: string,
+  url_4x: string,
+}
+
+interface EmoteData {
+  id: string,
   name: string,
-  images: string[],
-  scale: string
+  images: EmoteImage,
 }
 
 interface EmoteResponse {
-  data: Emote[],
+  data: EmoteData[],
   template: string
 }
 
-interface EmoteDatabase {
-  [name: string]: Emote;
+interface ExchangeSizeUrl {
+  [name: string]: string;
+}
+
+export interface EmoteDatabase {
+  [name: string]: EmoteImage;
 }
 
 export class TwitchService {
+  private static emoteDatabase: EmoteDatabase = {};
   private client = new tmi.Client({});
 
   constructor(private fansService: ChatterService) {
@@ -56,10 +67,9 @@ export class TwitchService {
 
     // TODO: Handle error
     let emotesData = await requestEmotes.json() as EmoteResponse;
-    console.log(emotesData.template);
-    for (let emote of emotesData.data) {
-      console.log(emote.name, emote.images, emote.scale);
-    }
+    for (let emote of emotesData.data)
+      TwitchService.emoteDatabase[emote.name] = emote.images;
+    console.log("Carregou");
   }
 
   private prepareListener() {
@@ -84,7 +94,22 @@ export class TwitchService {
     );
   }
 
+  static getUrlBySize(size: string, emote: EmoteImage): string {
+    size = "small"; // TODO: Validar melhor a questão dos botões invés de hard codar isso
+    const options: ExchangeSizeUrl = {
+      "small": emote.url_1x,
+      "medium": emote.url_2x,
+      "large": emote.url_4x,
+    };
+
+    return options[size];
+  }
+
   fans() {
     return this.fansService.chatters;
+  }
+
+  static get emotes(): EmoteDatabase {
+    return TwitchService.emoteDatabase;
   }
 }
