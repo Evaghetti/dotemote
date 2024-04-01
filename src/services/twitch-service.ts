@@ -2,6 +2,8 @@ import * as tmi from "tmi.js";
 
 import { ChatterService } from "./chatter-service";
 
+const CHANNEL = "vinidotruan";
+
 interface AuthResponse {
   access_token: string,
   expires_in: number,
@@ -74,12 +76,39 @@ export class TwitchService {
     let emotesData = await requestEmotes.json() as EmoteResponse;
     for (let emote of emotesData.data)
       TwitchService.emoteDatabase[emote.name] = emote.images;
+
+    let loginRequest = await fetch(`https://api.twitch.tv/helix/users?login=${CHANNEL}`, {
+      headers: {
+        'Authorization': `Bearer ${authResponse.access_token}`,
+        'Client-Id': `${config.client_id}`
+      }
+
+    });
+    // TODO: Handle error
+    let user_id: number = (await loginRequest.json()).data[0].id;
+    let responseBttv = await fetch(`https://api.betterttv.net/3/cached/users/twitch/${user_id}`)
+      .then(response => response.json())
+    // TODO: Handle channel emotes
+    for (let emote of responseBttv.sharedEmotes) {
+      const newEmote: EmoteData = {
+        id: emote.id,
+        name: emote.code,
+        images: {
+          url_1x: `https://cdn.betterttv.net/emote/${emote.id}/1x.webp`,
+          url_2x: `https://cdn.betterttv.net/emote/${emote.id}/2x.webp`,
+          url_4x: `https://cdn.betterttv.net/emote/${emote.id}/3x.webp`,
+        }
+      };
+
+      TwitchService.emoteDatabase[newEmote.name] = newEmote.images;
+    }
+    console.log(responseBttv);
     console.log("Carregou");
   }
 
   private prepareListener() {
     this.client = new tmi.Client({
-      channels: ["vinidotruan"]
+      channels: [CHANNEL]
     });
 
     this.client.connect();
