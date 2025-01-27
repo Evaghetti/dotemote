@@ -29,18 +29,16 @@ export class SpriteInfoLoader {
             database[animation.name] = { frames: [] };
             database[animation.name].frames = animation.frames;
           }
-
           this.animationDatabases.push(database);
         }
-
       });
   }
 
-  public get path(): string {
-    return this.pathes[this.currentIndex];
+  public getPath(index: number = this.currentIndex): string {
+    return this.pathes[index];
   }
 
-  public get animationDatabase(): SpriteAnimationDataBase {
-    return this.animationDatabases[this.currentIndex];
+  public getAnimationDatabase(index: number = this.currentIndex): SpriteAnimationDataBase {
+    return this.animationDatabases[index];
   }
 }

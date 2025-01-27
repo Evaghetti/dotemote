@@ -6,6 +6,7 @@ import { Sprite } from "./sprite";
 const VELOCITY = new Vector(50, 0);
 
 export class DotFan {
+    public animation: string = "andando";
     private bubbles: SpeechBubble[] = [];
     private position: Vector;
     private flipped: boolean;
@@ -19,7 +20,7 @@ export class DotFan {
             window.innerHeight - this.sprite.size.y
         );
 
-        this.animationController.changeAnimation("andando"); // TODO: mudar isso pra caso tenha mais de uma animação
+        this.animationController.changeAnimation(this.animation); // TODO: mudar isso pra caso tenha mais de uma animação
 
         this.flipped = Math.random() >= 0.5;
         if (this.flipped) this.sprite.flip();
