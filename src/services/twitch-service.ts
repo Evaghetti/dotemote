@@ -6,7 +6,7 @@ export class TwitchService {
 
   constructor(private fansService: ChatterService) {
     this.client = new tmi.Client({
-      channels: ["srdefive05"]
+      channels: ["vinidotruan"]
     });
 
     this.client.connect();
