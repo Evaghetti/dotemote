@@ -57,4 +57,8 @@ export class Sprite {
       ctx.scale(-1, 1);
     }
   }
+
+  public setPath(path: string) {
+    this.image.src = path;
+  }
 }

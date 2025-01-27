@@ -6,7 +6,7 @@ export class TwitchService {
 
   constructor(private fansService: ChatterService) {
     this.client = new tmi.Client({
-      channels: ["vinidotruan"]
+      channels: ["srdefive05"]
     });
 
     this.client.connect();
@@ -21,6 +21,21 @@ export class TwitchService {
         }
 
         let fan = this.fansService.chatter(chatter);
+
+        if (message == "!cap") {
+          this.fansService.deleteChatter(chatter);
+          this.fansService.addChatter(chatter, 1);
+          fan = this.fansService.chatter(chatter);
+          return;
+        }
+
+        if (message == "!viking") {
+          this.fansService.deleteChatter(chatter);
+          this.fansService.addChatter(chatter, 0);
+          fan = this.fansService.chatter(chatter);
+          return;
+        }
+
         fan.addMessage(message);
       }
     );

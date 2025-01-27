@@ -16,13 +16,13 @@ export class ChatterService {
     this.loadedData.load().then();
   }
 
-  public addChatter(id: string) {
+  public addChatter(id: string, sprite: number = 0) {
     let newChatter = new DotFan(
-      new Sprite(this.loadedData.path, {
+      new Sprite(this.loadedData.getPath(sprite), {
         position: new Vector(0, 10),
         size: new Vector(64, 64)
       }),
-      new AnimationController(this.loadedData.animationDatabase),
+      new AnimationController(this.loadedData.getAnimationDatabase(sprite)),
     );
     this._chatters[id] = newChatter;
   }
@@ -37,5 +37,9 @@ export class ChatterService {
 
   chatter(id: string): DotFan {
     return this._chatters[id];
+  }
+
+  deleteChatter(id: string) {
+    delete this._chatters[id];
   }
 }
