@@ -61,9 +61,7 @@ export class TwitchService {
     });
 
     // TODO: Handle error
-
     let authResponse = await requestAuth.json() as AuthResponse;
-
     let requestEmotes = await fetch("https://api.twitch.tv/helix/chat/emotes/global", {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
